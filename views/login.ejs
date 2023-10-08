@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Status Checker</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="../css/styles.css">
+    </head>
+
+    <body>
+        <header>
+            <div class="navbar">
+                <a href="/"><img src="https://projectsby.com/images/logo_small.png" alt="Projects By Logo"></a>
+            </div>
+        </header>
+        <main>
+            <div class="container mt-4">
+                <div id="addUrlForm" style="display: flex; flex-direction: column; align-items: center;">
+                    <h1 class="mb-4">Login</h1>
+                    <form action="/login" method="post" class="col-md-6" style="padding: 20px 30px;">
+                        <div class="form-group">
+                            <label for="username">Username:</label>
+                            <input type="text" class="form-control" id="username" name="username" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password:</label>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 50%; margin: 0 auto; background: #db9b4b; border: 0;">LOGIN</button>
+                    </form>
+                </div>
+            </div>
+        </main>
+
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="../js/main.js"></script>
+    </body>
+</html>
+
