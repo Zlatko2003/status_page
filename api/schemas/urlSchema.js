@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const request = require('request');
+const nodemailer = require('nodemailer');
 
 const urlSchema = new mongoose.Schema({
     name: String,
@@ -8,6 +9,33 @@ const urlSchema = new mongoose.Schema({
 });
 
 const URL = mongoose.model('URL', urlSchema);
+
+const transporter = nodemailer.createTransport({
+    host: 'smtppro.zoho.eu',
+    secure: true,
+    port: 465,
+    auth: {
+        user: 'it@projectsby.com',
+        pass: 'S&gkhjz3',
+    },
+});
+
+async function sendEmailNotification(url) {
+    const mailOptions = {
+        from: 'it@projectsby.com',
+        to: 'zlatkomarkovski+iltfntcd1vipjqpc4ugi@boards.trello.com',
+        subject: `${url} is DOWN`,
+        text: `${url} is DOWN. \nPlease check the website`,
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            console.error('Error sending email:', error);
+        } else {
+            console.log('Email notification sent:', info.response);
+        }
+    });
+}
 
 async function checkURLStatus(url) {
     return new Promise(async (resolve) => {
@@ -21,6 +49,7 @@ async function checkURLStatus(url) {
                         resolve('Online (without SSL)');
                     } else {
                         resolve('Offline');
+                        sendEmailNotification(url);
                     }
                 });
             }
@@ -28,4 +57,8 @@ async function checkURLStatus(url) {
     });
 }
 
-module.exports = { URL, checkURLStatus };
+module.exports = {
+    URL,
+    checkURLStatus,
+    sendEmailNotification
+};

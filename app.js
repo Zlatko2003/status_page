@@ -9,11 +9,12 @@ const ejs = require('ejs');
 const path = require('path');
 const passportLocalMongoose = require('passport-local-mongoose');
 const bcrypt = require('bcryptjs');
-const { URL, checkURLStatus } = require('./api/schemas/urlSchema');
+const { URL, checkURLStatus, sendEmailNotification } = require('./api/schemas/urlSchema');
 const User = require('./api/schemas/userSchema');
 const urlRoutes = require('./api/routes/urlRoutes');
 const userRoutes = require('./api/routes/userRoutes');
 const indexRoutes = require('./api/routes/index');
+const cron = require('./cron');
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
