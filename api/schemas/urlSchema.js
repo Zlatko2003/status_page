@@ -12,8 +12,8 @@ const URL = mongoose.model('URL', urlSchema);
 
 const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
+    port: 465,
     secure: true,
-    port: 587,
     auth: {
         user: 'projectsby2023@gmail.com',
         pass: 'lewywrvkwxzovdzh',
