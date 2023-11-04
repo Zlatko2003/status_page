@@ -31,7 +31,13 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-mongoose.connect('mongodb://localhost:27017/status_checker', {
+let mongo_db_url;
+if(process.env.user == 'pb_status'){
+    mongo_db_url = 'mongodb+srv://status_page_user:yO4YmFCTBO7mzMpw@cluster0.dm3xbxb.mongodb.net/status_page?retryWrites=true&w=majority'
+} else {
+    mongo_db_url = 'mongodb://localhost:27017/status_checker';
+}
+mongoose.connect(mongo_db_url, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 });
