@@ -11,12 +11,12 @@ const urlSchema = new mongoose.Schema({
 const URL = mongoose.model('URL', urlSchema);
 
 const transporter = nodemailer.createTransport({
-    host: 'smtppro.zoho.eu',
+    host: 'smtp.gmail.com',
     secure: true,
-    port: 465,
+    port: 587,
     auth: {
-        user: 'it@projectsby.com',
-        pass: 'S&gkhjz3',
+        user: 'projectsby2023@gmail.com',
+        pass: 'lewywrvkwxzovdzh',
     },
 });
 
