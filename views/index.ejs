@@ -12,9 +12,9 @@
     <body>
         <header>
             <div class="navbar">
-                <a href="/"><img src="https://projectsby.com/images/logo_small.png" alt="Projects By Logo"></a>
+                <a href="/"><img src="https://asskmind.com/static/media/logo_white.ad7cfa4e71f2460ebc39.png" alt="Asskmind Logo"></a>
                 <div class="buttons">
-                    <a href="#" onclick="showWebsites()">Websites</a>
+                    <a href="#" onclick="showJobs()">Jobs</a>
                     <a href="#" onclick="showUsers()">Users</a>
                     <a href="#" onclick="showAddUrlForm()" class="contact">Add new</a>
                     <a href="/logout"><i class="fa fa-sign-out" style="font-size:21px"></i></a>
@@ -52,64 +52,85 @@
                     </table>
                 </div>
 
-                <div id="websitesTable">
-                    <h1 class="mb-4">Websites</h1>
+                <div id="jobsTable">
+                    <h1 class="mb-4">Jobs</h1>
                     <table class="table table-bordered">
                         <thead>
                             <tr>
-                                <th style="width:80%;">Website Name</th>
-                                <th style="width:10%; text-align: center;">Status</th>
-            		            <th style="width:10%; text-align: center;">Action</th>
+                                <th style="width:50%;">Job Title</th>
+                                <th style="width:20%;">Location</th>
+                                <th style="width:20%;">Date</th>
+                                <th style="width:5%; text-align: center;">Status</th>
+                                <th style="width:5%; text-align: center;">Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <% urlsWithStatus.forEach((url) => { %>
+                            <% jobs.forEach((job) => { %>
                                 <tr>
-                                    <td style="vertical-align: middle;"><span style="font-weight: bold"><%= url.name %></span><br><span style="font-size:12px;">URL:</span> <a href="<%= url.url %>" target="_blank" style="font-size: 12px;"><%= url.url %></a></td>
-                                    <td style="text-align: center; vertical-align: middle; text-shadow: 0 0 25px black;">
-                                        <% let status = url.status.includes('Online') ? 'lime' : 'red'; %>
-                                        <% if (url.status.includes('Online')) { %>
-                                            <i class="fa fa-power-off" style="color: <%= status %>; font-size: 24px;"></i><br>
-                                            <% if (url.status.includes('with SSL')) { %>
-                                                <span style="font-size: 12px; color: <%= status %>;">Online<br>(with SSL)</span>
-                                            <% } else if (url.status.includes('without SSL')) { %>
-                                                <span style="font-size: 12px; color: <%= status %>;">Online<br>(without SSL)</span>
-                                            <% } %>
-                                        <% } else { %>
-                                            <i class="fa fa-power-off" style="color: <%= status %>; font-size: 24px;"></i><br>
-                                            <span style="font-size: 12px; color: <%= status %>;">Offline</span>
-                                        <% } %>
+                                    <td style="vertical-align: middle;">
+                                        <span style="font-weight: bold"><%= job.jobTitle %></span>
+                                        <br>
+                                        <span style="font-size:12px;">Description:</span>
+                                        <span style="font-size: 12px;"><%= job.jobDescription %></span>
                                     </td>
-            			            <td style="vertical-align: middle;">
+                                    <td style="vertical-align: middle;"><%= job.jobLocation %></td>
+                                    <td style="vertical-align: middle;"><%= new Date(job.jobDate).toLocaleDateString() %></td>
+                                    <td style="text-align: center; vertical-align: middle; text-shadow: 0 0 25px black;">
+                                        <% let statusColor = job.isJobActive == 'yes' ? 'lime' : 'red'; %>
+                                        <i class="fa fa-power-off" style="color: <%= statusColor %>; font-size: 24px;"></i>
+                                        <br>
+                                        <span style="font-size: 12px; color: <%= statusColor %>;">
+                                            <%= job.isJobActive == 'yes' ? 'Active' : 'Inactive' %>
+                                        </span>
+                                    </td>
+                                    <td style="vertical-align: middle;">
                                         <form action="/delete" method="post">
-                                            <input type="hidden" name="urlToDelete" value="<%= url.url %>">
-                                             <button type="submit" class="btn btn-danger" style="width: fit-content; margin: 0 auto;"><i class="fa fa-trash"></i></button>
+                                            <input type="hidden" name="jobId" value="<%= job._id %>">
+                                            <button type="submit" class="btn btn-danger" style="width: fit-content; margin: 0 auto;">
+                                                <i class="fa fa-trash"></i>
+                                            </button>
                                         </form>
-                                	</td>          		
-            	                </tr>
+                                    </td>          
+                                </tr>
                             <% }); %>
                         </tbody>
                     </table>
                 </div>
 
+
                 <div id="sectionForm" style="display: none">
                     <div style="display: flex; justify-content: center;">
-                        <button type="button" class="btn btn-secondary" style="width: 20%; margin: 10px;" onclick="toggleForm('addUrlForm')">ADD URL</button>
+                        <button type="button" class="btn btn-secondary" style="width: 20%; margin: 10px;" onclick="toggleForm('addJobForm')">ADD JOB</button>
                         <button type="button" class="btn btn-secondary" style="width: 20%; margin: 10px;" onclick="toggleForm('addUserForm')">ADD USER</button>
                     </div>
 
-                    <div id="addUrlForm" style="display: none; flex-direction: column; align-items: center;">
-                        <h2 class="mt-4">Add a URL</h2>
+                    <div id="addJobForm" style="display: none; flex-direction: column; align-items: center;">
+                        <h2 class="mt-4">Add a Job</h2>
                         <form action="/add" method="post" class="col-md-6" style="padding: 30px 50px;">
                             <div class="form-group">
-                                <label for="name">Website Name:</label>
-                                <input type="text" class="form-control" id="name" name="name" required>
+                                <label for="jobTitle">Job Title:</label>
+                                <input type="text" class="form-control" id="jobTitle" name="jobTitle" required>
                             </div>
                             <div class="form-group">
-                                <label for="url">Website URL:</label>
-                                <input type="text" class="form-control" id="url" name="url" required>
+                                <label for="jobLocation">Job Location:</label>
+                                <input type="text" class="form-control" id="jobLocation" name="jobLocation" required>
                             </div>
-                            <button type="submit" class="btn btn-primary" style="width: 50%; margin: 0 auto; background: #db9b4b; border: 0;">ADD URL</button>
+                            <div class="form-group">
+                                <label for="jobDate">Job Date:</label>
+                                <input type="date" class="form-control" id="jobDate" name="jobDate" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="jobDescription">Job Description:</label>
+                                <textarea class="form-control" id="jobDescription" name="jobDescription" rows="4" required style="background: #313131; border: none; color: white;"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="isJobActive">Is Job Active:</label>
+                                <select class="form-control" id="isJobActive" name="isJobActive" required style="background: #313131; border: none; color: white;">
+                                    <option value="yes">Yes</option>
+                                    <option value="no">No</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary" style="width: 50%; margin: 0 auto; background: #db9b4b; border: 0;">ADD JOB</button>
                         </form>
                     </div>
 

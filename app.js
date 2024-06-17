@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 const mongoose = require('mongoose');
 const session = require('express-session');
 const passport = require('passport');
@@ -9,16 +10,16 @@ const ejs = require('ejs');
 const path = require('path');
 const passportLocalMongoose = require('passport-local-mongoose');
 const bcrypt = require('bcryptjs');
-const { URL, checkURLStatus, sendEmailNotification } = require('./api/schemas/urlSchema');
+const { Job } = require('./api/schemas/jobSchema');
 const User = require('./api/schemas/userSchema');
-const urlRoutes = require('./api/routes/urlRoutes');
+const jobRoutes = require('./api/routes/jobRoutes');
 const userRoutes = require('./api/routes/userRoutes');
 const indexRoutes = require('./api/routes/index');
-const cron = require('./cron');
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(cors({ origin: '*' }));
 
 // Setup session
 app.use(session({
@@ -32,10 +33,11 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 let mongo_db_url;
-if(process.env.USER == 'pb_status'){
-    mongo_db_url = 'mongodb+srv://status_page_user:yO4YmFCTBO7mzMpw@cluster0.dm3xbxb.mongodb.net/status_page?retryWrites=true&w=majority'
+if(process.env.USER == 'root'){
+    mongo_db_url = 'mongodb+srv://asskmind_db:etdJZfiS33rxGaRl@asskmindadmin.hqs5iql.mongodb.net/asskmind_live?retryWrites=true&w=majority&appName=AsskmindAdmin';
+
 } else {
-    mongo_db_url = 'mongodb://localhost:27017/status_checker';
+    mongo_db_url = 'mongodb://localhost:27017/asskmind_dev';
 }
 mongoose.connect(mongo_db_url, {
     useNewUrlParser: true,
@@ -55,10 +57,10 @@ app.use('/js', express.static(path.resolve(__dirname, 'assets/js')));
 
 // Use routes
 app.use('/', indexRoutes);
-app.use('/', urlRoutes);
+app.use('/', jobRoutes);
 app.use('/', userRoutes);
 
-const PORT = process.env.PORT || 3001;
+const PORT = 3014;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
